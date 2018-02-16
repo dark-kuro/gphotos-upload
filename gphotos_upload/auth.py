@@ -4,7 +4,6 @@ import os.path
 import pickle
 
 from google_auth_oauthlib.flow import InstalledAppFlow
-
 from gphotos_upload.service import Service
 
 def login(flags, logger):
@@ -28,7 +27,10 @@ def login(flags, logger):
 def _get_flow_path():
     """Returns, e.g., ~/.config/gphotos-upload/auth-flow.p"""
     config_dir = appdirs.user_config_dir('gphotos-upload', 'adamhooper.com')
-    os.makedirs(config_dir, exist_ok=True)
+    try:
+        os.makedirs(config_dir)
+    except Exception as e:
+        print((e))
     path = os.path.join(config_dir, 'auth-flow.p')
     return path
 
@@ -58,3 +60,6 @@ def dump_flow(flow):
     path = _get_flow_path()
     with open(path, 'wb') as f:
         pickle.dump(flow, f)
+
+k =_get_flow_path()
+print(k)
