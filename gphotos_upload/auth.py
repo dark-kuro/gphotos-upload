@@ -60,6 +60,3 @@ def dump_flow(flow):
     path = _get_flow_path()
     with open(path, 'wb') as f:
         pickle.dump(flow, f)
-
-k =_get_flow_path()
-print(k)
