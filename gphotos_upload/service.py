@@ -6,10 +6,10 @@ import os
 import os.path
 import tempfile
 
-from PIL import ExifTags, Image
+# from PIL import ExifTags, Image
 
-HIGH_QUALITY_PX = 1600 # max image size 1600x1600 is free to store on Google Photos
-EXIF_DATE_TIME_TAG = [ k for k, v in ExifTags.TAGS.items() if v == 'DateTime' ][0]
+# HIGH_QUALITY_PX = 1600 # max image size 1600x1600 is free to store on Google Photos
+# EXIF_DATE_TIME_TAG = [ k for k, v in ExifTags.TAGS.items() if v == 'DateTime' ][0]
 
 class Service:
     def __init__(self, http, logger):
@@ -74,26 +74,27 @@ class Service:
 
     def upload_file_high_quality(self, path):
         with open(path, 'rb') as f:
-            with Image.open(f) as image:
-                max_dim = max(image.size)
-                if max_dim <= HIGH_QUALITY_PX:
-                    self.upload_file_data(self, path, f)
-                else:
-                    # We'd like to use io.BytesIO(), but Pillow's EXIF logic
-                    # (in resized.save()) expects fileno to exist. TemporaryFile
-                    # gives a fileno but doesn't actually add a file to the
-                    # filesystem.
-                    with tempfile.TemporaryFile() as resized_io:
-                        dims = (
-                            int(math.ceil(image.size[0] * HIGH_QUALITY_PX / max_dim)),
-                            int(math.ceil(image.size[1] * HIGH_QUALITY_PX / max_dim))
-                        )
-                        self.logger.info('Resizing %s from %dx%d to %dx%d' % (os.path.basename(path), image.size[0], image.size[1], dims[0], dims[1]))
-                        resized = image.resize(dims, Image.LANCZOS)
-                        new_exif = image.info['exif']
-                        resized.save(resized_io, format='JPEG', quality=90, optimize=True, subsampling='4:4:4', exif=new_exif)
-                        resized_io.seek(0)
-                        self.upload_file_data(path, resized_io)
+            self.upload_file_data(path, resized_io)
+            # with Image.open(f) as image:
+                # max_dim = max(image.size)
+                # if max_dim <= HIGH_QUALITY_PX:
+                #     self.upload_file_data(self, path, f)
+                # else:
+                #     # We'd like to use io.BytesIO(), but Pillow's EXIF logic
+                #     # (in resized.save()) expects fileno to exist. TemporaryFile
+                #     # gives a fileno but doesn't actually add a file to the
+                #     # filesystem.
+                #     with tempfile.TemporaryFile() as resized_io:
+                #         dims = (
+                #             int(math.ceil(image.size[0] * HIGH_QUALITY_PX / max_dim)),
+                #             int(math.ceil(image.size[1] * HIGH_QUALITY_PX / max_dim))
+                #         )
+                #         self.logger.info('Resizing %s from %dx%d to %dx%d' % (os.path.basename(path), image.size[0], image.size[1], dims[0], dims[1]))
+                #         resized = image.resize(dims, Image.LANCZOS)
+                #         new_exif = image.info['exif']
+                #         resized.save(resized_io, format='JPEG', quality=90, optimize=True, subsampling='4:4:4', exif=new_exif)
+                #         resized_io.seek(0)
+                #         self.upload_file_data(path, resized_io)
 
     def upload_file_data(self, path, data):
         slug = os.path.basename(path)
