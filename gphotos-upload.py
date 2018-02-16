@@ -5,11 +5,13 @@
 import argparse
 import logging
 import os
-import os.path
 import sys
 
 from gphotos_upload import auth
 from oauth2client import tools
+
+DIR_NAME = os.path.abspath(__file__)
+DIR_NAME = os.path.dirname(DIR_NAME)
 
 def upload_directory_to_service(directory, service, full_quality = False):
     for (dirpath, dirnames, filenames) in os.walk(directory):
@@ -30,6 +32,7 @@ def main():
     logger.addHandler(logging.StreamHandler(sys.stderr))
 
     service = auth.login(args, logger)
+    args.path = os.path.join(DIR_NAME, args.path)
     upload_directory_to_service(args.path, service, full_quality = args.full_quality)
 
 if __name__ == '__main__':
