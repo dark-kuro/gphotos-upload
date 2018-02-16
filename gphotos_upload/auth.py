@@ -48,7 +48,7 @@ def load_flow():
             flow = pickle.load(f)
             # TODO verify that "flow" is, in fact, a valid Flow
             return flow
-    except FileNotFoundError:
+    except:
         scope = 'https://picasaweb.google.com/data/'
         client_secrets = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
 
