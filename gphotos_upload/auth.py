@@ -1,4 +1,4 @@
-import appdirs
+from . import appdirs
 import os
 import os.path
 import pickle
