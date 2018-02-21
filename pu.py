@@ -24,7 +24,7 @@ def main():
         try:
             inp = input('Enter dir: ')
             # inp = inp.strip()
-            args.path = os.path.join(uphotos.DIR_NAME+'\..',inp)
+            args.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), inp)
             if not os.path.isdir(args.path):
                 print('Not dir')
                 raise Exception
