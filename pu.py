@@ -23,7 +23,7 @@ def main():
     while 1:
         try:
             inp = input('Enter dir: ')
-            inp = inp.strip()
+            # inp = inp.strip()
             args.path = inp
             upload_media(args, api)
         except Exception as e:
