@@ -20,30 +20,16 @@ def main():
     args = parser.parse_args()
     # print(args)
     api = uphotos.login(args)
-    # credentials = google.oauth2.credentials.Credentials(api.http)
-    # print('credentials', vars(credentials))
-    # drive = build('drive', 'v3', credentials=credentials)
-    # upload_media(args, api)
-    # c = api.http
-    # print(dir(c))
-    # print(dir(api.http))
-    # api.http._client='jj'
-    # credentials
-    # print
-    # print((api.http))
-    # print((api.http._scopes))
-    # print((api.http.refresh_token))
-    # response = api.http.get()
-    # .from_client_secrets_file()
-    # print(vars(response))
-
-    # rrr=response.oauth2session
-    # rrr._client = response.client_config['client_id']
-    api = api.http
-    response = api.get('https://picasaweb.google.com/data/feed/api/user/default')
-    print('response', vars(response))
-    # print(vars(.get()))
-    # response.authorized_session(client_id="")
+    while 1:
+        try:
+            inp = input('Enter dir: ')
+            inp = inp.strip()
+            args.path = inp
+            upload_media(args, api)
+        except:
+            print('ERROR')
+            pass
+        
 
 
 if __name__ == '__main__':
