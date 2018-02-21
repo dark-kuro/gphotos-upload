@@ -26,8 +26,8 @@ def main():
             inp = inp.strip()
             args.path = inp
             upload_media(args, api)
-        except:
-            print('ERROR')
+        except Exception as e:
+            print('ERROR:', e)
             pass
         
 
