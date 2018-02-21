@@ -78,8 +78,8 @@ def login(flags):
 
     # is_session = isinstance(flow, requests.Session)
     try:
-        flow.run_local_server()
-        # flow.run_console()
+        # flow.run_local_server()
+        flow.run_console()
     except:
         return Service(flow, logger)
     try:
