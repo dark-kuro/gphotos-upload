@@ -18,14 +18,20 @@ def main():
     	nargs='?', 
     	default='.')
     args = parser.parse_args()
-    # print(args)
+    # # print(args)
     api = uphotos.login(args)
     while 1:
         try:
             inp = input('Enter dir: ')
             # inp = inp.strip()
-            args.path = inp
+            args.path = os.path.join(uphotos.DIR_NAME+'\..',inp)
+            if not os.path.isdir(args.path):
+                print('Not dir')
+                raise Exception
+            # api = ''
+
             upload_media(args, api)
+            print(args.path)
         except Exception as e:
             print('ERROR:', e)
             pass

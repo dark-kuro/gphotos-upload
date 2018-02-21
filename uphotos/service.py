@@ -1,5 +1,6 @@
 import logging
 import os
+import io
 
 class Service:
     def __init__(self, http, logger):
@@ -17,6 +18,39 @@ class Service:
     def ensure_file_uploaded(self, path, full_quality = False):
         if not self.file_is_uploaded(path):
             self.upload_file_with_quality(path, full_quality)
+
+    def upload_file_with_quality(self, path, full_quality):
+        if full_quality:
+            # self.upload_file_full_quality(path)
+            print('Not implemenrted')
+        else:
+            self.upload_file_high_quality(path)
+
+
+    def upload_file_high_quality(self, path):
+        with open(path, 'rb') as f:
+            self.upload_file_data(path, f)
+
+    def upload_file_data(self, path, data):
+        slug = os.path.basename(path)
+        n_bytes = data.seek(-1, io.SEEK_END)
+        data.seek(0)
+        print('Uploading %s' % slug)
+
+        self.logger.info('Uploading %s' % slug)
+        response = self.http.post(
+            'https://picasaweb.google.com/data/feed/api/user/default/albumid/default',
+            headers = {
+                'Slug': str(slug),
+                'Content-Type': 'image/jpeg',
+                'Content-Length': str(n_bytes),
+            },
+            data = data
+        )
+        if response.status_code != 201:
+            print(response.text)
+            response.raise_for_status()
+
 
     def file_is_uploaded(self, path):
         if not self.photos_already_online:
